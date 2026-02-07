@@ -1,2 +1,0 @@
-C:\mingw64\bin\ar.exe qc libgraph_engine.a CMakeFiles/graph_engine.dir/src/connected_components.cpp.obj CMakeFiles/graph_engine.dir/src/pagerank.cpp.obj CMakeFiles/graph_engine.dir/src/parallel_bfs.cpp.obj CMakeFiles/graph_engine.dir/src/parallel_dfs.cpp.obj CMakeFiles/graph_engine.dir/src/sssp.cpp.obj CMakeFiles/graph_engine.dir/src/triangle_count.cpp.obj
-C:\mingw64\bin\ranlib.exe libgraph_engine.a
