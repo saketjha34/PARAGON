@@ -65,7 +65,7 @@ Parallelism is applied at different levels depending on the algorithm:
 ### Build Steps
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/saketjha34/PARAGON.git
 cd PARAGON
 mkdir build
 cd build
@@ -74,7 +74,6 @@ cmake --build .
 ```
 
 All executables are generated in the `build/` directory.
-
 
 
 ## Running Tests
