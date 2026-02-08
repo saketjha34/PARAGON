@@ -35,4 +35,5 @@ docs/
 
 build/
 
-.vscode/
+!.vscode/c_cpp_properties.json
+!.vscode/tasks.json
