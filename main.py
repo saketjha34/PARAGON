@@ -36,23 +36,43 @@
 # print("Number of triangles in the graph:", t)
 
 
-from paragon import Graph
+# from paragon import Graph
 
-g = Graph(5)
-g.print_graph()
-g.add_edge(0, 1)  # Adding an edge between vertices 0 and 1
-print("Vertices in the graph:", g.vertices())
-print("Edges in the graph:", g.has_edge(0, 1))
-print("Degree of vertex 1:", g.degree(1))
-print("Adjacency List:", g.get_adj())
-g.add_vertex()
-g.has_edge(0, 1)
-g.build_from_adj_list([[1], [0, 2], [1, 3], [2, 4], [3]])
-print("Adjacency List after building from matrix:", g.get_adj())
-g.print_graph()
+# g = Graph(5)
+# g.print_graph()
+# g.add_edge(0, 1)  # Adding an edge between vertices 0 and 1
+# print("Vertices in the graph:", g.vertices())
+# print("Edges in the graph:", g.has_edge(0, 1))
+# print("Degree of vertex 1:", g.degree(1))
+# print("Adjacency List:", g.get_adj())
+# g.add_vertex()
+# g.has_edge(0, 1)
+# g.build_from_adj_list([[1], [0, 2], [1, 3], [2, 4], [3]])
+# print("Adjacency List after building from matrix:", g.get_adj())
+# g.print_graph()
 
-from paragon.algorithms import pagerank
+# from paragon.algorithms import pagerank
 
+
+from paragon import WeightedGraph
+from paragon.algorithms import parallel_dijkstra
+
+g = WeightedGraph(6)
+
+g.add_edges([
+    (0, 1, 4.0),
+    (0, 2, 2.0),
+    (1, 3, 5.0),
+    (2, 1, 1.0),
+    (2, 3, 8.0),
+    (3, 4, 3.0),
+    (4, 5, 1.0)
+])
+
+dist = parallel_dijkstra(g, 0)
+
+for i, d in enumerate(dist):
+    print(f"Distance from 0 → {i}: {d}")
 
 # from paragon import WeightedGraph
 
