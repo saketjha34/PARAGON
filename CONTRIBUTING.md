@@ -4,33 +4,77 @@ This document will help you set up the project, run tests, and contribute effect
 
 
 ##  Project Overview
-
 PARAGON is a high-performance parallel graph processing engine written in C++ with Python bindings via pybind11.
+Here’s a **clean, detailed, contributor-ready “Prerequisites & Setup” section** you can drop into your `CONTRIBUTING.md` or `README.md`.
 
-# Prerequisites
 
-## Python
-- Python 3.9 – 3.11 (recommended: 3.11)
+## Prerequisites (for Local Development)
 
-## C++ Toolchain
+To develop PARAGON locally (C++ + Python), you need a working setup for:
 
-### Linux
-```bash
-sudo apt-get install build-essential cmake ninja-build
+```text
+✔ Python environment
+✔ C++ compiler toolchain
+✔ Build system (CMake + Ninja)
+✔ Python ↔ C++ binding support (pybind11)
 ```
 
-### Windows
 
-* Install:
-  * Visual Studio Build Tools OR MinGW
-  * Ninja (`pip install ninja`)
+### Python Requirements
+
+* **Python version:** `3.9 – 3.11` (recommended: **3.11**)
+* Ensure Python is added to PATH
 
 
-## Python Dependencies
+### C++ Toolchain
+
+#### Linux (Ubuntu/Debian)
+
+Install:
 
 ```bash
-pip install -r requirements.txt
+sudo apt-get update
+sudo apt-get install -y build-essential cmake ninja-build
 ```
+
+Includes:
+
+* `g++` → compiler
+* `make` → build tool (fallback)
+* `cmake` → build system
+* `ninja` → fast build backend (recommended)
+
+
+#### Windows
+
+##### Option 1 (Recommended): MSVC Toolchain
+
+Install **Visual Studio Build Tools**
+ 
+[https://visualstudio.microsoft.com/visual-cpp-build-tools/](https://visualstudio.microsoft.com/visual-cpp-build-tools/)
+
+Select during installation:
+
+```text
+✔ Desktop development with C++
+✔ MSVC v143 (or latest)
+✔ Windows 10/11 SDK
+✔ CMake tools for Windows
+```
+
+
+### Build Tools
+
+#### CMake (Required)
+
+Minimum version: **3.16+**
+
+Check:
+
+```bash
+cmake --version
+```
+
 
 #  Running Locally
 
@@ -81,7 +125,24 @@ cmake --build build
 ## Install locally (editable)
 
 ```bash
+python -m venv .venv
+```
+
+```bash
+source .venv/bin/activate  # Linux/Mac
+.venv\Scripts\activate     # Windows
+```
+
+```bash
+pip` install -r requirements.txt
+```
+
+```bash
 pip install -e .
+```
+
+```bash
+python -m build
 ```
 
 ## Test Python API
@@ -160,7 +221,7 @@ Every Pull Request runs:
 #  Contribution Guidelines
 
 
-## 🔹 Code Style
+## Code Style
 
 ### C++
 
@@ -173,22 +234,15 @@ Every Pull Request runs:
 * Type hints required
 * Add docstrings for all public APIs
 
-
 ##  Pull Requests
 
-Before opening PR:
+Before opening a PR:
 
 * [ ] Code builds locally
 * [ ] Tests pass
 * [ ] No unnecessary files
 * [ ] Clean commit history
 
-
-# Tips
-
-* Use **Ninja** for faster builds
-* Prefer **Python 3.11**
-* Keep C++ and Python APIs consistent
 
 # Need Help?
 

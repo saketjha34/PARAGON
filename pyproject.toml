@@ -4,7 +4,7 @@ build-backend = "scikit_build_core.build"
 
 [project]
 name = "paragon-engine" 
-version = "v0.1.8"
+version = "0.1.9"
 description = "High-performance parallel graph processing engine (C++ + Python)"
 readme = "README.md"
 authors = [{name = "Saket Jha"}]

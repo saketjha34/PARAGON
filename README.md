@@ -163,7 +163,7 @@ for i, d in enumerate(dist):
 * Barrier synchronization
 * Lock-based + lock-free hybrid design
 
-# ⚡ Performance
+# Performance
 
 PARAGON achieves:
 
@@ -197,18 +197,9 @@ pip install -e .
 python -m build
 ```
 
-# Future Improvements
-
-* Prebuilt wheels (no compilation needed)
-* GPU support (CUDA / OpenMP)
-* Distributed graph processing
-* Graph streaming support
-
-
 # Contributing
-
 PRs welcome!
-
+For more details, see [CONTRIBUTING.md](CONTRIBUTING.md)
 Suggested areas:
 
 * New algorithms (e.g., SCC, MST)
@@ -217,4 +208,4 @@ Suggested areas:
 * Documentation
 
 # Author
-**Saket Jha**
+**Jha Saket Sunil**
