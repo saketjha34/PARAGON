@@ -1,17 +1,38 @@
-.. PARAGON documentation master file, created by
-   sphinx-quickstart on Tue Apr 14 00:29:12 2026.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+PARAGON Documentation
+====================
 
-PARAGON documentation
-=====================
+🚀 Parallel Graph Engine for High-Performance Computing
 
-Add your content using ``reStructuredText`` syntax. See the
-`reStructuredText <https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html>`_
-documentation for details.
+---
 
+📌 Overview
+-----------
+
+PARAGON is a high-performance C++ parallel graph processing engine
+supporting algorithms like:
+
+- BFS
+- PageRank (push/pull)
+- Connected Components
+- SSSP
+- Triangle Counting
+
+---
+
+📚 Documentation
+----------------
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
+   getting_started
+   algorithms
+   benchmarks
+
+---
+
+🔗 Links
+--------
+
+- GitHub: https://github.com/saketjha34/PARAGON
