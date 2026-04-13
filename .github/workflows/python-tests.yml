@@ -1,0 +1,63 @@
+name: Python Tests (PARAGON)
+
+on:
+  pull_request:
+
+jobs:
+  python-tests:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    steps:
+      # ================= CHECKOUT =================
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ================= PYTHON SETUP =================
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # ================= LINUX DEPENDENCIES =================
+      - name: Install dependencies (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake ninja-build
+          python -m pip install --upgrade pip
+          python -m pip install pybind11 pytest
+
+      # ================= WINDOWS DEPENDENCIES =================
+      - name: Install dependencies (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install ninja pybind11 pytest
+
+      # ================= FIX PYBIND11 =================
+      - name: Set pybind11_DIR
+        run: |
+          echo "PYBIND11_DIR=$(python -c 'import pybind11; print(pybind11.get_cmake_dir())')" >> $GITHUB_ENV
+
+      # ================= BUILD C++ EXTENSION =================
+      - name: Configure CMake
+        run: |
+          cmake -B build -G Ninja -Dpybind11_DIR=$PYBIND11_DIR
+
+      - name: Build
+        run: |
+          cmake --build build
+
+      # ================= INSTALL PACKAGE =================
+      - name: Install PARAGON
+        run: |
+          pip install -e .
+
+      # ================= RUN PYTHON TESTS =================
+      - name: Run Python tests
+        run: |
+          pytest python/tests -v
