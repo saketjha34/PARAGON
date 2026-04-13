@@ -1,7 +1,7 @@
 # PARAGON: Parallel Graph Processing Engine
 
 [![License](https://img.shields.io/github/license/saketjha34/PARAGON.svg)](https://github.com/saketjha34/PARAGON/blob/main/LICENSE)
-[![PyPI version](https://badge.fury.io/py/paragon-engine.svg)](https://pypi.org/project/paragon-engine/)
+[![PyPI](https://img.shields.io/pypi/v/paragon-engine)](https://pypi.org/project/paragon-engine/)
 [![GitHub issues](https://img.shields.io/github/issues/saketjha34/PARAGON.svg)](https://github.com/saketjha34/PARAGON/issues)
 
 
