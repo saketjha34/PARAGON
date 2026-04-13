@@ -1,9 +1,9 @@
 # PARAGON: Parallel Graph Processing Engine
 
-[![License](https://img.shields.io/github/license/saketjha34/paragon-py.svg)](https://github.com/saketjha34/PARAGON/blob/main/LICENSE)
+[![License](https://img.shields.io/github/license/saketjha34/PARAGON.svg)](https://github.com/saketjha34/PARAGON/blob/main/LICENSE)
 [![PyPI version](https://badge.fury.io/py/paragon-engine.svg)](https://pypi.org/project/paragon-engine/)
 [![GitHub issues](https://img.shields.io/github/issues/saketjha34/paragon-py.svg)](https://github.com/saketjha34/PARAGON/issues)
-[![Tests](https://github.com/saketjha34/paragon-py/actions/workflows/cpp-tests.yml/badge.svg)](https://github.com/saketjha34/paragon-py/actions)
+
 
 
 PARAGON is a high-performance parallel graph processing engine written in modern C++ with Python bindings via pybind11.
@@ -37,9 +37,8 @@ Python 3.13 + MinGW is incompatible
 
 ### Python version
 
-```bash
-Python 3.8 – 3.11 (RECOMMENDED)
-```
+* Python 3.8 – 3.11 (RECOMMENDED)
+
 
 Avoid Python 3.13 for now (ABI issues with pybind11 + MinGW)
 
@@ -133,11 +132,11 @@ print("Adjacency List:", g.get_adj())
 ```
 
 
-# Example — Shortest Path (SSSP)
+## Example: Shortest Path (SSSP)
 
 ```python
 from paragon import WeightedGraph
-from paragon.algorithms import sssp
+from paragon.algorithms import parallel_dijkstra
 
 g = WeightedGraph(6)
 
@@ -151,13 +150,13 @@ g.add_edges([
     (4, 5, 1.0)
 ])
 
-dist = sssp(g, 0)
+dist = parallel_dijkstra(g, 0)
 
 for i, d in enumerate(dist):
     print(f"Distance from 0 → {i}: {d}")
 ```
 
-# 🧵 Parallel Engine Features
+# Parallel Engine Features
 
 * Thread pool via `std::thread`
 * Work partitioning (chunking)
@@ -175,18 +174,6 @@ PARAGON achieves:
 
 #  Development
 
-## Build locally
-
-```bash
-pip install -e .
-```
-
-## Build wheel
-
-```bash
-python -m build
-```
-
 ## Run examples (C++)
 
 ```bash
@@ -199,19 +186,17 @@ Then
 cmake --build build
 ```
 
-### MinGW + Python 3.13
+## Build locally
 
-You may see errors like:
-
-```
-undefined reference to Py_DecRefShared
+```bash
+pip install -e .
 ```
 
-### Fix:
+## Build wheel
 
-* Use **MSVC**
-* OR use **Python ≤ 3.11**
-
+```bash
+python -m build
+```
 
 # Future Improvements
 
@@ -230,7 +215,7 @@ Suggested areas:
 * New algorithms (e.g., SCC, MST)
 * Performance optimizations
 * Python API improvements
-
+* Documentation
 
 # Author
 **Saket Jha**
