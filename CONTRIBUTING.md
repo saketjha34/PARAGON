@@ -5,7 +5,6 @@ This document will help you set up the project, run tests, and contribute effect
 
 ##  Project Overview
 PARAGON is a high-performance parallel graph processing engine written in C++ with Python bindings via pybind11.
-Here’s a **clean, detailed, contributor-ready “Prerequisites & Setup” section** you can drop into your `CONTRIBUTING.md` or `README.md`.
 
 
 ## Prerequisites (for Local Development)
@@ -18,7 +17,6 @@ To develop PARAGON locally (C++ + Python), you need a working setup for:
 ✔ Build system (CMake + Ninja)
 ✔ Python ↔ C++ binding support (pybind11)
 ```
-
 
 ### Python Requirements
 
@@ -51,7 +49,7 @@ Includes:
 
 Install **Visual Studio Build Tools**
  
-[https://visualstudio.microsoft.com/visual-cpp-build-tools/](https://visualstudio.microsoft.com/visual-cpp-build-tools/)
+[Visual Studio Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/)
 
 Select during installation:
 
@@ -71,10 +69,17 @@ Minimum version: **3.16+**
 
 Check:
 
+Ubuntu:
 ```bash
+sudo apt install -y cmake
 cmake --version
 ```
 
+Windows:
+```bash
+pip install cmake
+cmake --version
+```
 
 #  Running Locally
 
@@ -120,29 +125,71 @@ cmake -B build -G Ninja -DBUILD_BENCHMARKS=ON
 cmake --build build
 ```
 
-# Python Development
+# Python Development Setup
 
-## Install locally (editable)
+## 1. Create a Virtual Environment
 
 ```bash
 python -m venv .venv
 ```
 
-```bash
-source .venv/bin/activate  # Linux/Mac
-.venv\Scripts\activate     # Windows
-```
+* Creates an isolated Python environment inside `.venv/`
+* Keeps project dependencies separate from system Python
+
+## 2. Activate the Virtual Environment
+
+### Linux / macOS:
 
 ```bash
-pip` install -r requirements.txt
+source .venv/bin/activate
 ```
+
+### Windows:
+
+```bash
+.venv\Scripts\activate
+```
+
+## 3. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+* Installs all required Python dependencies for development
+* Includes tools like `pytest`, `pybind11`, etc.
+
+## 4. Install PARAGON in Editable Mode
 
 ```bash
 pip install -e .
 ```
 
+* Installs the package **in development mode**
+* Any changes you make in the source code are immediately reflected
+* No need to reinstall after every change
+
+## 5. Build the Package (Optional but Recommended)
+
 ```bash
 python -m build
+```
+
+* Builds distributable files:
+
+  * `.whl` (wheel)
+  * `.tar.gz` (source)
+
+```text
+dist/
+├── paragon_engine-0.x.x-py3-none-any.whl
+└── paragon_engine-0.x.x.tar.gz
+```
+
+## 6. Run Tests
+
+```bash
+pytest python/tests -v
 ```
 
 ## Test Python API
@@ -213,13 +260,12 @@ export TWINE_PASSWORD=pypi-xxxxxxxxxxxx
 
 Every Pull Request runs:
 
-*  C++ build
+*  C++ build, pytest test
 *  Tests (Linux + Windows)
 *  PR fails if tests fail
 
 
 #  Contribution Guidelines
-
 
 ## Code Style
 

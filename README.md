@@ -22,26 +22,18 @@ Designed for:
 
 # Installation
 
-## IMPORTANT
-
-### Windows users:
+## Windows users:
 
 You **MUST use MSVC (Visual Studio Build Tools)**
 
 MinGW WILL FAIL
 Python 3.13 + MinGW is incompatible
 
-
-## Recommended Setup
-
 ### Python version
 
 * Python 3.8 – 3.11 (RECOMMENDED)
 
-
 Avoid Python 3.13 for now (ABI issues with pybind11 + MinGW)
-
-##  Windows Setup
 
 ### 1. Install Visual Studio Build Tools
 
@@ -64,8 +56,8 @@ pip install paragon-engine
 ### Install dependencies
 
 ```bash
-sudo apt install build-essential cmake python3-dev
-pip install pybind11 scikit-build-core
+sudo apt-get update
+sudo apt-get install -y build-essential cmake ninja-build
 ```
 
 Then:
@@ -131,7 +123,7 @@ print("Adjacency List:", g.get_adj())
 ```
 
 
-## Example: Shortest Path (SSSP)
+## Example: Shortest Path Parallel Dijkstra's Algorithm
 
 ```python
 from paragon import WeightedGraph
@@ -165,11 +157,14 @@ for i, d in enumerate(dist):
 
 # Performance
 
-PARAGON achieves:
+## PARAGON Benchmark
 
-* Significant speedup on multicore CPUs
-* Efficient memory access patterns
-* Cache-aware adjacency traversal
+| Algorithm                      | Configuration (V, E) | Time (Sequential) | Time (Parallel) | Speedup       | Key Observations                                                                                                       |
+| ------------------------------ | -------------------- | ----------------- | --------------- | ------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| **SSSP (Parallel Relaxation)** | (3000, 10,000)       | 398 ms            | 5 ms            | **~80× **   | Sequential behaves like Bellman–Ford (O(V·E)); parallel version uses early stopping + edge relaxation → massive gains. |
+| **PageRank**                   | (20, 20,000,000)     | 3026 ms           | 1180 ms         | **~2.5× **   | Highly parallelizable (no dependencies, uniform work). Limited by memory bandwidth & synchronization barriers.         |
+| **Connected Components (CC)**  | (20, 20,000,000)     | 1451 ms           | 876 ms          | **~1.65× ** | Parallelism helps only for dense graphs. Sequential DFS is cache-efficient for small graphs.                           |
+| **Triangle Counting**          | (20, 200,000)        | ~12,500 ms        | ~3,600 ms       | **~3.4× **  | Perfect for parallelism: independent work, no sync, heavy computation. CPU cores fully utilized.                       |
 
 #  Development
 
