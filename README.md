@@ -5,7 +5,7 @@
 [![GitHub issues](https://img.shields.io/github/issues/saketjha34/PARAGON.svg)](https://github.com/saketjha34/PARAGON/issues)
 
 
-PARAGON is a high-performance parallel graph processing engine written in modern C++ with Python bindings via pybind11.
+PARAGON is a high performance parallel graph processing engine written in modern C++ with Python bindings via pybind11.
 It provides scalable implementations of core graph algorithms like:
 
 * Parallel BFS / DFS
@@ -37,13 +37,13 @@ Avoid Python 3.13 for now (ABI issues with pybind11 + MinGW)
 
 ### 1. Install Visual Studio Build Tools
 
-Download: [https://visualstudio.microsoft.com/visual-cpp-build-tools/](https://visualstudio.microsoft.com/visual-cpp-build-tools/)
+Download: [Visual Studio Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/)
 
 Select:
 
-* ✔ C++ build tools
-* ✔ MSVC compiler
-* ✔ Windows SDK
+*  C++ build tools
+*  MSVC compiler
+*  Windows SDK
 
 ### 2. Install package
 
