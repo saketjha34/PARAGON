@@ -1,5 +1,6 @@
-#include <bits/stdc++.h>
-using namespace std;
+#include <vector>
+#include <atomic>
+#include <algorithm>
 
 #include "../include/connected_components.hpp"
 #include "../include/engine.hpp"
@@ -8,7 +9,7 @@ using namespace std;
     Parallel Connected Components
     Shiloach–Vishkin style (pointer jumping)
 */
-vector<int> parallel_connected_components(
+std::vector<int> parallel_connected_components(
     const Graph& graph,
     int threads
 ) {
@@ -17,14 +18,14 @@ vector<int> parallel_connected_components(
 
     threads = engine::get_thread_count(threads);
 
-    vector<int> parent(V);
+    std::vector<int> parent(V);
     for (int i = 0; i < V; i++)
         parent[i] = i;
 
     bool changed = true;
 
     while (changed) {
-        atomic<bool> any_change(false);
+        std::atomic<bool> any_change(false);
 
         // Hooking phase
         engine::parallel_for(0, V, threads, [&](int u) {
@@ -34,12 +35,12 @@ vector<int> parallel_connected_components(
 
                 if (pu == pv) continue;
 
-                int high = max(pu, pv);
-                int low  = min(pu, pv);
+                int high = std::max(pu, pv);
+                int low  = std::min(pu, pv);
 
                 if (parent[high] == high) {
                     parent[high] = low;
-                    any_change.store(true, memory_order_relaxed);
+                    any_change.store(true, std::memory_order_relaxed);
                 }
             }
         });

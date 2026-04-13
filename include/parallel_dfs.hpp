@@ -1,6 +1,6 @@
 #pragma once
-#include <bits/stdc++.h>
-using namespace std;
+
+#include <vector>
 
 #include "graph.hpp"
 
@@ -16,7 +16,7 @@ using namespace std;
       visited[i] = true if reachable from source
 */
 
-vector<bool> parallel_dfs(
+std::vector<bool> parallel_dfs(
     const Graph& graph,
     int source,
     int threads = -1

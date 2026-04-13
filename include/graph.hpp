@@ -1,90 +1,88 @@
 #pragma once
-#include <bits/stdc++.h>
-using namespace std;
 
+#include <vector>
+#include <utility>
+#include <tuple>
+#include <stdexcept>
+#include <algorithm>
+#include <iostream>
+
+/*
+    ============================
+    GRAPH (BASE CLASS)
+    ============================
+*/
 class Graph {
-private:
-    int V;                                 // Number of vertices
-    bool directed;                         // Directed or undirected graph
-    vector<vector<int>> adj;               // Adjacency list
+protected:
+    int V;
+    bool directed;
+    std::vector<std::vector<int>> adj;
 
 public:
-    /* ================= CONSTRUCTORS ================= */
+    /* ===== CONSTRUCTORS ===== */
 
-    // Default constructor
     Graph() : V(0), directed(false) {}
 
-    // Create graph with V vertices
-    Graph(int vertices, bool isDirected = false) {
-        V = vertices;
-        directed = isDirected;
+    Graph(int vertices, bool isDirected = false)
+        : V(vertices), directed(isDirected) {
         adj.resize(V);
     }
 
-    // Create graph from adjacency list
-    Graph(const vector<vector<int>>& adjacency, bool isDirected = false) {
+    // From adjacency list
+    Graph(const std::vector<std::vector<int>>& adjacency, bool isDirected = false) {
         V = adjacency.size();
         directed = isDirected;
         adj = adjacency;
     }
 
-    // Create graph from edge list
-    Graph(int vertices, const vector<pair<int,int>>& edges, bool isDirected = false) {
-        V = vertices;
-        directed = isDirected;
+    // From edge list
+    Graph(int vertices,
+          const std::vector<std::pair<int,int>>& edges,
+          bool isDirected = false)
+        : V(vertices), directed(isDirected) {
+
         adj.resize(V);
         for (auto &e : edges) {
             addEdge(e.first, e.second);
         }
     }
 
-    /* ================= BASIC UTILITIES ================= */
+    virtual ~Graph() = default;
 
-    // Number of vertices
-    int vertices() const {
-        return V;
-    }
+    /* ===== BASIC ===== */
 
-    // Check if graph is directed
-    bool isDirected() const {
-        return directed;
-    }
+    int vertices() const { return V; }
 
-    // Get adjacency list
-    const vector<vector<int>>& getAdj() const {
+    bool isDirected() const { return directed; }
+
+    const std::vector<std::vector<int>>& getAdj() const {
         return adj;
     }
 
-    /* ================= MODIFY GRAPH ================= */
+    /* ===== MODIFY ===== */
 
-    // Add a new vertex
-    void addVertex() {
+    virtual void addVertex() {
         adj.push_back({});
         V++;
     }
 
-    // Add an edge u -> v
-    void addEdge(int u, int v) {
+    virtual void addEdge(int u, int v) {
         if (u >= V || v >= V)
-            throw out_of_range("Vertex index out of range");
+            throw std::out_of_range("Vertex index out of range");
 
         adj[u].push_back(v);
-        if (!directed) {
+        if (!directed)
             adj[v].push_back(u);
-        }
     }
 
-    // Add multiple edges
-    void addEdges(const vector<pair<int,int>>& edges) {
-        for (auto &e : edges) {
+    virtual void addEdges(const std::vector<std::pair<int,int>>& edges) {
+        for (auto &e : edges)
             addEdge(e.first, e.second);
-        }
     }
 
-    /* ================= BUILD FROM DATA ================= */
+    /* ===== BUILD ===== */
 
-    // Build graph from adjacency matrix
-    void buildFromAdjMatrix(const vector<vector<int>>& matrix) {
+    virtual void buildFromAdjMatrix(const std::vector<std::vector<int>>& matrix) {
         int n = matrix.size();
         V = n;
         adj.assign(V, {});
@@ -100,56 +98,50 @@ public:
         }
     }
 
-    // Build graph from adjacency list
-    void buildFromAdjList(const vector<vector<int>>& adjacency) {
+    virtual void buildFromAdjList(const std::vector<std::vector<int>>& adjacency) {
         V = adjacency.size();
         adj = adjacency;
     }
 
-    /* ================= GRAPH INFO ================= */
+    /* ===== INFO ===== */
 
-    // Degree of a vertex
     int degree(int u) const {
         if (u >= V)
-            throw out_of_range("Vertex index out of range");
+            throw std::out_of_range("Invalid vertex");
         return adj[u].size();
     }
 
-    // Check edge existence
     bool hasEdge(int u, int v) const {
         if (u >= V || v >= V)
-            throw out_of_range("Vertex index out of range");
-        return find(adj[u].begin(), adj[u].end(), v) != adj[u].end();
+            throw std::out_of_range("Invalid vertex");
+
+        return std::find(adj[u].begin(), adj[u].end(), v) != adj[u].end();
     }
 
-    /* ================= DEBUG ================= */
+    /* ===== DEBUG ===== */
 
-    // Print adjacency list
-    void printGraph() const {
+    virtual void printGraph() const {
         for (int i = 0; i < V; i++) {
-            cout << i << " : ";
-            for (int v : adj[i]) {
-                cout << v << " ";
-            }
-            cout << "\n";
+            std::cout << i << " : ";
+            for (int v : adj[i])
+                std::cout << v << " ";
+            std::cout << "\n";
         }
     }
 };
 
 
 /*
-    WeightedGraph
-
-    - Inherits from Graph
-    - Stores (neighbor, weight)
-    - Used for SSSP / Dijkstra
+    ============================
+    WEIGHTED GRAPH
+    ============================
 */
 class WeightedGraph : public Graph {
 private:
-    vector<vector<pair<int,double>>> wadj;
+    std::vector<std::vector<std::pair<int,double>>> wadj;
 
 public:
-    /* ================= CONSTRUCTORS ================= */
+    /* ===== CONSTRUCTORS ===== */
 
     WeightedGraph() : Graph() {}
 
@@ -158,37 +150,96 @@ public:
         wadj.resize(vertices);
     }
 
-    /* ================= WEIGHTED EDGES ================= */
+    /* ===== MODIFY ===== */
 
-    void addEdge(int u, int v, double w) {
-        if (u >= vertices() || v >= vertices())
-            throw out_of_range("Vertex index out of range");
-
-        wadj[u].push_back({v, w});
-        if (!isDirected())
-            wadj[v].push_back({u, w});
+    void addVertex() override {
+        Graph::addVertex();
+        wadj.push_back({});
     }
 
-    void addEdges(const vector<tuple<int,int,double>>& edges) {
+    void addEdge(int u, int v, double w) {
+        if (u >= V || v >= V)
+            throw std::out_of_range("Vertex index out of range");
+
+        // weighted adjacency
+        wadj[u].push_back({v, w});
+
+        // 🔥 FIX: update base graph adjacency
+        adj[u].push_back(v);
+
+        if (!directed) {
+            wadj[v].push_back({u, w});
+            adj[v].push_back(u);
+        }
+    }
+
+    void addEdges(const std::vector<std::tuple<int,int,double>>& edges) {
         for (auto& [u, v, w] : edges)
             addEdge(u, v, w);
     }
 
-    /* ================= ACCESS ================= */
+    /* ===== BUILD ===== */
 
-    const vector<vector<pair<int,double>>>& getWeightedAdj() const {
+    void buildFromAdjList(
+        const std::vector<std::vector<std::pair<int,double>>>& adjacency
+    ) {
+        V = adjacency.size();
+        wadj = adjacency;
+
+        // keep base structure consistent
+        adj.assign(V, {});
+        for (int u = 0; u < V; u++) {
+            for (auto& [v, _] : wadj[u]) {
+                adj[u].push_back(v);
+            }
+        }
+    }
+
+    void buildFromAdjMatrix(
+        const std::vector<std::vector<double>>& matrix
+    ) {
+        int n = matrix.size();
+        V = n;
+
+        wadj.assign(V, {});
+        adj.assign(V, {});
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < matrix[i].size(); j++) {
+                if (matrix[i][j] != 0) {
+                    wadj[i].push_back({j, matrix[i][j]});
+                    adj[i].push_back(j);
+
+                    if (!directed && i != j) {
+                        wadj[j].push_back({i, matrix[i][j]});
+                        adj[j].push_back(i);
+                    }
+                }
+            }
+        }
+    }
+
+    /* ===== ACCESS ===== */
+
+    const std::vector<std::vector<std::pair<int,double>>>&
+    getWeightedAdj() const {
         return wadj;
     }
 
-    /* ================= DEBUG ================= */
+    /* ===== DEBUG ===== */
 
-    void printWeightedGraph() const {
-        for (int i = 0; i < wadj.size(); i++) {
-            cout << i << " : ";
+    void printGraph() const override {
+        for (int i = 0; i < V; i++) {
+            std::cout << i << " : ";
             for (auto& [v, w] : wadj[i]) {
-                cout << "(" << v << ", w=" << w << ") ";
+                std::cout << "(" << v << ", " << w << ") ";
             }
-            cout << "\n";
+            std::cout << "\n";
         }
     }
+
+    // backward compatibility
+    void printWeightedGraph() const {
+        printGraph();
+    }    
 };

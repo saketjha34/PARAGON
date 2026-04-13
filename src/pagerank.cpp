@@ -1,10 +1,12 @@
-#include <bits/stdc++.h>
-using namespace std;
+#include <vector>
+#include <algorithm>
+#include <stdexcept>
 
 #include "../include/pagerank.hpp"
 #include "../include/engine.hpp"
 
-vector<double> parallel_pagerank(
+
+std::vector<double> parallel_pagerank(
     const Graph& graph,
     int iterations,
     double damping,
@@ -13,46 +15,73 @@ vector<double> parallel_pagerank(
     int V = graph.vertices();
     const auto& adj = graph.getAdj();
 
+    // ================= VALIDATION =================
     if (V == 0)
         return {};
 
-    // Build reverse adjacency list (incoming edges)
-    vector<vector<int>> incoming(V);
+    if (iterations <= 0)
+        throw std::invalid_argument("iterations must be positive");
+
+    if (damping <= 0.0 || damping >= 1.0)
+        throw std::invalid_argument("damping must be in (0,1)");
+
+    // ================= BUILD INCOMING GRAPH =================
+    std::vector<std::vector<int>> incoming(V);
     for (int u = 0; u < V; u++) {
         for (int v : adj[u]) {
             incoming[v].push_back(u);
         }
     }
 
-    vector<double> rank(V, 1.0 / V);
-    vector<double> new_rank(V, 0.0);
+    // ================= INITIALIZE =================
+    std::vector<double> rank(V, 1.0 / V);
+    std::vector<double> new_rank(V, 0.0);
 
     threads = engine::get_thread_count(threads);
 
+    // ================= ITERATIONS =================
     for (int iter = 0; iter < iterations; iter++) {
 
+        // -------- HANDLE DANGLING NODES --------
+        double dangling_sum = 0.0;
+        for (int u = 0; u < V; u++) {
+            if (adj[u].empty()) {
+                dangling_sum += rank[u];
+            }
+        }
+
+        // -------- PARALLEL UPDATE --------
         engine::parallel_for(0, V, threads, [&](int v) {
             double sum = 0.0;
 
+            // Sum contributions from incoming edges
             for (int u : incoming[v]) {
-                if (!adj[u].empty())
+                if (!adj[u].empty()) {
                     sum += rank[u] / adj[u].size();
+                }
             }
 
-            new_rank[v] = (1.0 - damping) / V + damping * sum;
+            // PageRank formula with dangling correction
+            new_rank[v] =
+                (1.0 - damping) / V +
+                damping * (sum + dangling_sum / V);
         });
 
-        // Barrier reached here (all threads joined)
+        // -------- SWAP ARRAYS --------
         rank.swap(new_rank);
+
+        // -------- RESET BUFFER (IMPORTANT) --------
+        std::fill(new_rank.begin(), new_rank.end(), 0.0);
     }
 
     return rank;
 }
 
+
 /*
     Push-based (BFS-style) PageRank
 */
-vector<double> parallel_pagerank_bfs(
+std::vector<double> parallel_pagerank_bfs(
     const Graph& graph,
     int iterations,
     double damping,
@@ -63,20 +92,36 @@ vector<double> parallel_pagerank_bfs(
 
     if (V == 0) return {};
 
-    vector<double> rank(V, 1.0 / V);
-    vector<double> next_rank(V, 0.0);
+    if (iterations <= 0)
+        throw std::invalid_argument("iterations must be positive");
+
+    if (damping <= 0.0 || damping >= 1.0)
+        throw std::invalid_argument("damping must be in (0,1)");
+
+    std::vector<double> rank(V, 1.0 / V);
+    std::vector<double> next_rank(V, 0.0);
 
     threads = engine::get_thread_count(threads);
 
     for (int iter = 0; iter < iterations; iter++) {
 
-        // One local buffer per thread
-        vector<vector<double>> local_buffers(threads, vector<double>(V, 0.0));
+        // DANGLING NODES
+        double dangling_sum = 0.0;
+        for (int u = 0; u < V; u++) {
+            if (adj[u].empty()) {
+                dangling_sum += rank[u];
+            }
+        }
+
+        // Thread-local buffers
+        std::vector<std::vector<double>> local_buffers(
+            threads, std::vector<double>(V, 0.0)
+        );
 
         engine::parallel_for(0, threads, threads, [&](int tid) {
             int chunk = engine::chunk_size(V, threads);
             int start = tid * chunk;
-            int end   = min(V, start + chunk);
+            int end   = std::min(V, start + chunk);
 
             for (int u = start; u < end; u++) {
                 if (adj[u].empty()) continue;
@@ -88,19 +133,19 @@ vector<double> parallel_pagerank_bfs(
             }
         });
 
-        // Merge local buffers (serial, safe)
-        fill(next_rank.begin(), next_rank.end(), 0.0);
+        // Merge buffers
+        std::fill(next_rank.begin(), next_rank.end(), 0.0);
         for (int t = 0; t < threads; t++) {
             for (int v = 0; v < V; v++) {
                 next_rank[v] += local_buffers[t][v];
             }
         }
 
-        // Apply damping
+        // FINAL UPDATE WITH DANGLING FIX
         engine::parallel_for(0, V, threads, [&](int v) {
             next_rank[v] =
                 (1.0 - damping) / V +
-                damping * next_rank[v];
+                damping * (next_rank[v] + dangling_sum / V);
         });
 
         rank.swap(next_rank);

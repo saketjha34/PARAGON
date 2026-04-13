@@ -1,6 +1,6 @@
 #pragma once
-#include <bits/stdc++.h>
-using namespace std;
+
+#include <vector>
 
 #include "graph.hpp"
 
@@ -17,7 +17,7 @@ using namespace std;
       distance[i] = -1 if unreachable
 */
 
-vector<int> parallel_bfs(
+std::vector<int> parallel_bfs(
     const Graph& graph,
     int source,
     int threads = -1

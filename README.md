@@ -1,176 +1,241 @@
-# PARAGON — Parallel Graph Engine
+# PARAGON: Parallel Graph Processing Engine
 
-**PARAGON (PARAllel Graph ENgine)** is a high-performance **C++ parallel graph processing engine** 
-that implements and benchmarks core graph algorithms on multicore CPUs.
-
-The project focuses on:
-
-* efficient parallel execution
-* algorithm-level parallelism
-* scalable graph analytics
-* reproducible performance evaluation
+[![License](https://img.shields.io/github/license/saketjha34/paragon-py.svg)](https://github.com/saketjha34/paragon-py/blob/main/LICENSE)
+[![PyPI version](https://badge.fury.io/py/paragon-engine.svg)](https://pypi.org/project/paragon-engine/)
+[![GitHub issues](https://img.shields.io/github/issues/saketjha34/paragon-py.svg)](https://github.com/saketjha34/paragon-py/issues)
+[![Tests](https://github.com/saketjha34/paragon-py/actions/workflows/cpp-tests.yml/badge.svg)](https://github.com/saketjha34/paragon-py/actions)
 
 
-## Project Structure
+PARAGON is a high-performance parallel graph processing engine written in modern C++ with Python bindings via pybind11.
+It provides scalable implementations of core graph algorithms like:
 
-```
-PARAGON/
-├── include/        # Public headers
-├── src/            # Core engine & algorithms
-├── examples/       # Usage examples
-├── benchmark/      # Performance benchmarks
-├── tests/          # Unit tests
-├── CMakeLists.txt
-└── README.md
-```
+* Parallel BFS / DFS
+* Connected Components
+* PageRank (Pull + Push)
+* Single Source Shortest Path (SSSP)
+* Triangle Counting
 
+Designed for:
 
-## Implemented Algorithms
+* Multicore CPUs
+* Large-scale graphs
+* Systems + algorithm engineering
 
-| Algorithm                          | Parallel Strategy           | Use Case                    |
-| ---------------------------------- | --------------------------- | --------------------------- |
-| Breadth-First Search (BFS)         | Frontier-level parallelism  | Reachability, traversal     |
-| PageRank (Pull)                    | Vertex-level parallelism    | Ranking, influence          |
-| PageRank (Push/BFS-style)          | Edge-level parallelism      | Large web graphs            |
-| Connected Components               | Hooking + pointer jumping   | Clustering, segmentation    |
-| Single Source Shortest Path (SSSP) | Parallel edge relaxation    | Routing, network analysis   |
-| Triangle Counting                  | Vertex-level + intersection | Graph analytics, clustering |
+# Installation
 
+## IMPORTANT
 
-## Parallelism Model
+### Windows users:
 
-PARAGON uses a lightweight parallel execution engine based on:
+You **MUST use MSVC (Visual Studio Build Tools)**
 
-* static work partitioning
-* thread-level parallelism
-* per-thread local aggregation
-* barrier synchronization when required
-
-Parallelism is applied at different levels depending on the algorithm:
-
-* **Vertex-level**: PageRank, Triangle Counting
-* **Edge-level**: SSSP, PageRank (push)
-* **Frontier-level**: BFS
-* **Structure-level**: Connected Components
+MinGW WILL FAIL
+Python 3.13 + MinGW is incompatible
 
 
+## Recommended Setup
 
-## 🛠️ Build & Installation (CMake)
-
-### Requirements
-
-* C++17 compatible compiler (GCC / MinGW)
-* CMake ≥ 3.16
-
-### Build Steps
+### Python version
 
 ```bash
-git clone https://github.com/saketjha34/PARAGON.git
-cd PARAGON
-mkdir build
-cd build
-cmake -G "MinGW Makefiles" ..
-cmake --build .
+Python 3.8 – 3.11 (RECOMMENDED)
 ```
 
-All executables are generated in the `build/` directory.
+Avoid Python 3.13 for now (ABI issues with pybind11 + MinGW)
 
+##  Windows Setup
 
-## Running Tests
+### 1. Install Visual Studio Build Tools
+
+Download: [https://visualstudio.microsoft.com/visual-cpp-build-tools/](https://visualstudio.microsoft.com/visual-cpp-build-tools/)
+
+Select:
+
+* ✔ C++ build tools
+* ✔ MSVC compiler
+* ✔ Windows SDK
+
+### 2. Install package
 
 ```bash
-cd build
-run_tests
+pip install paragon-engine
 ```
 
+## Linux / Mac
 
-## Running Examples
+### Install dependencies
 
 ```bash
-example_bfs
-example_pagerank
-example_parallel_pagerank_bfs
-example_connected_components
-example_sssp
-example_triangle_count
+sudo apt install build-essential cmake python3-dev
+pip install pybind11 scikit-build-core
 ```
 
-Each example uses a deterministic graph definition.
-
-
-## Running Benchmarks
+Then:
 
 ```bash
-benchmark_sssp
-benchmark_pagerank
-benchmark_connected_components
-benchmark_triangle_count
+pip install paragon-engine
 ```
 
 
-## Benchmark Results
+# Quick Start
 
-Benchmarks were executed using **8 threads** on a multicore CPU.
+## Example: Parallel BFS + DFS
+```python
+from paragon import Graph
+from paragon.algorithms import parallel_bfs, parallel_dfs
 
-### Single Source Shortest Path (SSSP)
+NUM_THREADS = 4
 
-```
-V = 3000, E = 10000
-```
+g = Graph(5)
+g.add_edges([
+    (0, 1),
+    (1, 2),
+    (2, 3),
+    (3, 4)
+])
 
-| Version    | Time   |
-| ---------- | ------ |
-| Sequential | 398 ms |
-| Parallel   | 5 ms   |
+distance = parallel_bfs(graph=g, source=0, threads=NUM_THREADS)
+print(distance)
 
-**Speedup:** ~79×
-
-Parallelism is applied through concurrent edge relaxations and early convergence.
-
-
-### PageRank
-
-```
-V = 20, E = 20,000,000
+visited = parallel_dfs(graph=g, source=0, threads=NUM_THREADS)
+print(visited)
 ```
 
-| Version    | Time    |
-| ---------- | ------- |
-| Sequential | 3026 ms |
-| Parallel   | 1180 ms |
 
-**Speedup:** ~2.6×
+# API Overview
 
-Parallelism is applied at the vertex and edge levels with synchronization per iteration.
+## Graph
 
+```python
+from paragon import Graph
 
-### Connected Components
+g = Graph(5)
+g.add_edge(0, 1)  # Adding an edge between vertices 0 and 1
+g.add_edges([(1, 2), (2, 3)])  # Adding multiple edges at once
 
-```
-V = 20, E = 20,000,000
-```
-
-| Version    | Time    |
-| ---------- | ------- |
-| Sequential | 1451 ms |
-| Parallel   | 876 ms  |
-
-**Speedup:** ~1.65×
-
-Uses a parallel hooking and pointer-jumping strategy.
-
-
-### Triangle Counting
-
-```
-V = 20, E = 200,000
+print("Vertices in the graph:", g.vertices())
+print("Edges in the graph:", g.has_edge(0, 1))
+print("Degree of vertex 1:", g.degree(1))
+print("Adjacency List:", g.get_adj())
 ```
 
-| Version    | Time     |
-| ---------- | -------- |
-| Sequential | 12478 ms |
-| Parallel   | 3598 ms  |
+## WeightedGraph
 
-**Speedup:** ~3.4×
+```python
+from paragon import WeightedGraph
 
-Parallelism is applied through independent adjacency list intersections.
+g = WeightedGraph(5)
+g.add_edge(0, 1, 2.5)  # Adding a weighted edge between vertices 0 and 1
+g.add_edges([(1, 2, 3.0), (2, 3, 4.0)])  # Adding multiple weighted edges at once
+
+print("Vertices in the graph:", g.vertices())
+print("Edges in the graph:", g.has_edge(0, 1))
+print("Degree of vertex 1:", g.degree(1))
+print("Adjacency List:", g.get_adj())
+```
+
+
+# Example — Shortest Path (SSSP)
+
+```python
+from paragon import WeightedGraph
+from paragon.algorithms import sssp
+
+g = WeightedGraph(6)
+
+g.add_edges([
+    (0, 1, 4.0),
+    (0, 2, 2.0),
+    (1, 3, 5.0),
+    (2, 1, 1.0),
+    (2, 3, 8.0),
+    (3, 4, 3.0),
+    (4, 5, 1.0)
+])
+
+dist = sssp(g, 0)
+
+for i, d in enumerate(dist):
+    print(f"Distance from 0 → {i}: {d}")
+```
+
+# 🧵 Parallel Engine Features
+
+* Thread pool via `std::thread`
+* Work partitioning (chunking)
+* Atomic operations for safety
+* Barrier synchronization
+* Lock-based + lock-free hybrid design
+
+# ⚡ Performance
+
+PARAGON achieves:
+
+* Significant speedup on multicore CPUs
+* Efficient memory access patterns
+* Cache-aware adjacency traversal
+
+#  Development
+
+## Build locally
+
+```bash
+pip install -e .
+```
+
+## Build wheel
+
+```bash
+python -m build
+```
+
+## Run examples (C++)
+
+```bash
+cmake -B build -G Ninja -DBUILD_TESTS=ON -DBUILD_EXAMPLES=ON -DBUILD_BENCHMARKS=ON
+```
+
+Then
+
+```bash
+cmake --build build
+```
+
+### MinGW + Python 3.13
+
+You may see errors like:
+
+```
+undefined reference to Py_DecRefShared
+```
+
+### Fix:
+
+* Use **MSVC**
+* OR use **Python ≤ 3.11**
+
+
+# Future Improvements
+
+* Prebuilt wheels (no compilation needed)
+* GPU support (CUDA / OpenMP)
+* Distributed graph processing
+* Graph streaming support
+
+
+# Contributing
+
+PRs welcome!
+
+Suggested areas:
+
+* New algorithms (e.g., SCC, MST)
+* Performance optimizations
+* Python API improvements
+
+
+# License
+MIT License
+
+# Author
+**Saket Jha**

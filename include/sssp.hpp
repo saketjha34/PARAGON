@@ -1,6 +1,6 @@
 #pragma once
-#include <bits/stdc++.h>
-using namespace std;
+
+#include <vector>
 
 #include "graph.hpp"
 
@@ -12,7 +12,7 @@ using namespace std;
     - Parallel edge relaxation
 */
 
-vector<double> parallel_dijkstra(
+std::vector<double> parallel_dijkstra(
     const WeightedGraph& graph,
     int source,
     int threads = -1

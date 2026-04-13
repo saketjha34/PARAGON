@@ -2,7 +2,7 @@
 using namespace std;
 
 #include "../include/graph.hpp"
-#include "../include/dfs.hpp"
+#include "../include/parallel_dfs.hpp"
 #include "test_framework.hpp"
 #include "test_registry.hpp"
 

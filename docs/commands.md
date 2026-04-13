@@ -159,54 +159,6 @@ g++ -std=gnu++17 -Iinclude tests/test_pagerank.cpp src/*.cpp -o test_pagerank
 test_pagerank
 ```
 
----
-
-## ⚠️ Common Errors & Fixes
-
-### ❌ Undefined reference (linker error)
-
-**Cause:** `.cpp` file not linked
-**Fix:** Always include `src/*.cpp`
-
-```bash
-g++ examples/parallel_bfs.cpp src/*.cpp -o bfs_example
-```
-
----
-
-### ❌ Multiple definition error
-
-**Cause:** Function implemented in both `src/` and `examples/`
-**Rule:**
-
-* `src/` → implementations
-* `examples/` → usage only
-
----
-
-### ❌ `bits/stdc++.h` not found
-
-* Works with **MinGW / GCC**
-* ❌ Not supported by MSVC
-
----
-
-## 🛠 Recommended Compile Flags
-
-```bash
--std=gnu++17   # C++ standard
--Iinclude      # include directory
--O2            # optimization (optional)
-```
-
-Example:
-
-```bash
-g++ -O2 -std=gnu++17 -Iinclude examples/parallel_bfs.cpp src/*.cpp -o bfs_example
-```
-
----
-
 ## 🧠 Notes for Contributors
 
 * Always run tests before adding new algorithms
@@ -224,15 +176,3 @@ g++ -O2 -std=gnu++17 -Iinclude examples/parallel_bfs.cpp src/*.cpp -o bfs_exampl
 | BFS example      | `g++ -std=gnu++17 -Iinclude examples/parallel_bfs.cpp src/*.cpp -o bfs_example`  |
 | DFS example      | `g++ -std=gnu++17 -Iinclude examples/parallel_dfs.cpp src/*.cpp -o dfs_example`  |
 | PageRank example | `g++ -std=gnu++17 -Iinclude examples/pagerank.cpp src/*.cpp -o pagerank_example` |
-
----
-
-If you want next, I can:
-
-* Merge this into a **full README.md**
-* Add **CMake commands**
-* Add **Linux/macOS commands**
-* Add **benchmark commands**
-* Add **CI-style test commands**
-
-Just tell me 👍

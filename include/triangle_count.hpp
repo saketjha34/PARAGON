@@ -1,6 +1,6 @@
 #pragma once
-#include <bits/stdc++.h>
-using namespace std;
+
+#include <cstdint>   // for int64_t (better than long long)
 
 #include "graph.hpp"
 
@@ -13,7 +13,7 @@ using namespace std;
     Works on UNDIRECTED graphs.
 */
 
-long long triangle_count_parallel(
+std::int64_t triangle_count_parallel(
     const Graph& graph,
     int threads = -1
 );

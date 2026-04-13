@@ -1,6 +1,6 @@
 #pragma once
-#include <bits/stdc++.h>
-using namespace std;
+
+#include <vector>
 
 #include "graph.hpp"
 
@@ -20,7 +20,7 @@ using namespace std;
     - vector<double> rank values
 */
 
-vector<double> parallel_pagerank(
+std::vector<double> parallel_pagerank(
     const Graph& graph,
     int iterations = 20,
     double damping = 0.85,
@@ -35,7 +35,7 @@ vector<double> parallel_pagerank(
     - BFS-like frontier expansion
     - BSP-style iterations
 */
-vector<double> parallel_pagerank_bfs(
+std::vector<double> parallel_pagerank_bfs(
     const Graph& graph,
     int iterations = 20,
     double damping = 0.85,

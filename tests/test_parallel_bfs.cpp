@@ -2,7 +2,7 @@
 using namespace std;
 
 #include "../include/graph.hpp"
-#include "../include/bfs.hpp"
+#include "../include/parallel_bfs.hpp"
 #include "test_framework.hpp"
 #include "test_registry.hpp"
 

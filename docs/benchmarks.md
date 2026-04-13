@@ -302,11 +302,3 @@ This proves:
 * Your engine works
 * Your parallel abstraction is sound
 * You chose the *right* algorithm to showcase parallelism
-
----
-
-## 6️⃣ How to Present This (Important for README / Interviews)
-
-You can confidently write:
-
-> “Triangle counting shows substantial parallel speedups due to high computational intensity and minimal synchronization. On dense graphs, the parallel implementation achieves over 3× speedup compared to sequential.”

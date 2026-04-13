@@ -1,0 +1,24 @@
+[build-system]
+requires = ["scikit-build-core>=0.8", "pybind11"]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "paragon-engine" 
+version = "0.1.7"
+description = "High-performance parallel graph processing engine (C++ + Python)"
+readme = "README.md"
+authors = [{name = "Saket Jha"}]
+license = {text = "MIT"}
+requires-python = ">=3.8"
+
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: C++",
+    "Operating System :: OS Independent",
+]
+
+[tool.scikit-build]
+wheel.packages = ["python/paragon"]
+
+[tool.scikit-build.cmake.define]
+CMAKE_BUILD_TYPE = "Release"

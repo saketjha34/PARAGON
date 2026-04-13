@@ -2,8 +2,7 @@
 using namespace std;
 
 #include "../include/graph.hpp"
-#include "../include/dfs.hpp"
-// #include "../src/parallel_dfs.cpp"
+#include "../include/parallel_dfs.hpp"
 
 int main() {
     cout << "===== PARALLEL DFS EXAMPLE =====\n\n";

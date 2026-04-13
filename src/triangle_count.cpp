@@ -1,5 +1,5 @@
-#include <bits/stdc++.h>
-using namespace std;
+#include <vector>
+#include <algorithm>
 
 #include "../include/triangle_count.hpp"
 #include "../include/engine.hpp"
@@ -8,17 +8,16 @@ using namespace std;
     Helper: count intersection size of two sorted vectors
 */
 static inline int count_intersection(
-    const vector<int>& a,
-    const vector<int>& b,
+    const std::vector<int>& a,
+    const std::vector<int>& b,
     int min_val
 ) {
     int i = 0, j = 0, cnt = 0;
 
-    // skip values <= min_val to enforce ordering
-    while (i < a.size() && a[i] <= min_val) i++;
-    while (j < b.size() && b[j] <= min_val) j++;
+    while (i < (int)a.size() && a[i] <= min_val) i++;
+    while (j < (int)b.size() && b[j] <= min_val) j++;
 
-    while (i < a.size() && j < b.size()) {
+    while (i < (int)a.size() && j < (int)b.size()) {
         if (a[i] == b[j]) {
             cnt++;
             i++; j++;
@@ -34,7 +33,7 @@ static inline int count_intersection(
 /*
     Parallel triangle counting
 */
-long long triangle_count_parallel(
+std::int64_t triangle_count_parallel(
     const Graph& graph,
     int threads
 ) {
@@ -43,18 +42,18 @@ long long triangle_count_parallel(
 
     threads = engine::get_thread_count(threads);
 
-    vector<vector<int>> g = adj;
+    std::vector<std::vector<int>> g = adj;
     for (auto& v : g)
-        sort(v.begin(), v.end());
+        std::sort(v.begin(), v.end());
 
-    vector<long long> local_counts(threads, 0);
+    std::vector<std::int64_t> local_counts(threads, 0);
 
     engine::parallel_for(0, threads, threads, [&](int tid) {
         int chunk = engine::chunk_size(V, threads);
         int start = tid * chunk;
-        int end   = min(V, start + chunk);
+        int end   = std::min(V, start + chunk);
 
-        long long local = 0;
+        std::int64_t local = 0;
 
         for (int u = start; u < end; u++) {
             for (int v : g[u]) {
@@ -67,8 +66,8 @@ long long triangle_count_parallel(
         local_counts[tid] = local;
     });
 
-    long long total = 0;
-    for (long long c : local_counts)
+    std::int64_t total = 0;
+    for (auto c : local_counts)
         total += c;
 
     return total;

@@ -1,10 +1,13 @@
-#include <bits/stdc++.h>
-using namespace std;
+#include <vector>
+#include <atomic>
+#include <stack>
+#include <thread>
+#include <mutex>
 
-#include "../include/dfs.hpp"
+#include "../include/parallel_dfs.hpp"
 #include "../include/engine.hpp"
 
-vector<bool> parallel_dfs(
+std::vector<bool> parallel_dfs(
     const Graph& graph,
     int source,
     int threads
@@ -12,19 +15,19 @@ vector<bool> parallel_dfs(
     int V = graph.vertices();
     const auto& adj = graph.getAdj();
 
-    vector<atomic<bool>> visited(V);
+    std::vector<std::atomic<bool>> visited(V);
     for (int i = 0; i < V; i++)
         visited[i] = false;
 
     // Shared work stack
-    stack<int> st;
-    mutex st_mutex;
+    std::stack<int> st;
+    std::mutex st_mutex;
 
     visited[source] = true;
     st.push(source);
 
     threads = engine::get_thread_count(threads);
-    vector<thread> workers;
+    std::vector<std::thread> workers;
 
     auto worker = [&]() {
         while (true) {
@@ -32,7 +35,7 @@ vector<bool> parallel_dfs(
 
             // Get work
             {
-                lock_guard<mutex> lock(st_mutex);
+                std::lock_guard<std::mutex> lock(st_mutex);
                 if (st.empty())
                     return;
                 u = st.top();
@@ -42,7 +45,7 @@ vector<bool> parallel_dfs(
             // Explore neighbors
             for (int v : adj[u]) {
                 if (!visited[v].exchange(true)) {
-                    lock_guard<mutex> lock(st_mutex);
+                    std::lock_guard<std::mutex> lock(st_mutex);
                     st.push(v);
                 }
             }
@@ -55,9 +58,9 @@ vector<bool> parallel_dfs(
     for (auto& th : workers)
         th.join();
 
-    vector<bool> result(V);
+    std::vector<bool> result(V);
     for (int i = 0; i < V; i++)
-        result[i] = visited[i];
+        result[i] = visited[i].load();
 
     return result;
 }

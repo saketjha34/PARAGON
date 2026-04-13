@@ -1,13 +1,8 @@
 #pragma once
-#include <bits/stdc++.h>
-using namespace std;
 
-/*
-    Engine utilities for parallel execution
-    --------------------------------------
-    This file provides common helpers used
-    across all parallel graph algorithms.
-*/
+#include <vector>
+#include <thread>
+#include <algorithm>
 
 namespace engine {
 
@@ -15,7 +10,7 @@ namespace engine {
 
     // Get number of hardware threads (fallback to 1)
     inline int hardware_threads() {
-        unsigned int hc = thread::hardware_concurrency();
+        unsigned int hc = std::thread::hardware_concurrency();
         return hc == 0 ? 1 : hc;
     }
 
@@ -23,7 +18,7 @@ namespace engine {
     inline int get_thread_count(int requested = -1) {
         if (requested <= 0)
             return hardware_threads();
-        return min(requested, hardware_threads());
+        return std::min(requested, hardware_threads());
     }
 
     /* ================= CHUNKING ================= */
@@ -36,8 +31,6 @@ namespace engine {
 
     /* ================= PARALLEL FOR ================= */
 
-    // Generic parallel for-loop
-    // Executes func(i) for i in [start, end)
     template <typename Func>
     void parallel_for(int start, int end, int threads, Func func) {
         threads = get_thread_count(threads);
@@ -46,15 +39,15 @@ namespace engine {
         if (total <= 0) return;
 
         int chunk = chunk_size(total, threads);
-        vector<thread> workers;
+        std::vector<std::thread> workers;
 
         for (int t = 0; t < threads; t++) {
             int s = start + t * chunk;
-            int e = min(end, s + chunk);
+            int e = std::min(end, s + chunk);
 
             if (s >= e) break;
 
-            workers.emplace_back([=]() {
+            workers.emplace_back([=, &func]() {
                 for (int i = s; i < e; i++)
                     func(i);
             });
@@ -66,7 +59,6 @@ namespace engine {
 
     /* ================= PARALLEL FOREACH ================= */
 
-    // Parallel for-each over a container
     template <typename Container, typename Func>
     void parallel_for_each(const Container& c, int threads, Func func) {
         parallel_for(0, (int)c.size(), threads, [&](int i) {

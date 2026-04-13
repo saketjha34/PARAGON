@@ -1,0 +1,62 @@
+name: C++ Tests (PARAGON)
+
+on:
+  pull_request:  
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ================= PYTHON SETUP =================
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # ================= LINUX =================
+      - name: Install dependencies (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake ninja-build
+          python -m pip install --upgrade pip
+          python -m pip install pybind11
+
+      # ================= WINDOWS =================
+      - name: Install dependencies (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install ninja pybind11
+
+      # ================= VERIFY =================
+      - name: Verify pybind11
+        run: |
+          python -c "import pybind11; print(pybind11.get_cmake_dir())"
+
+      # ================= CONFIGURE =================
+      - name: Configure CMake
+        run: |
+          cmake -B build -G Ninja -DBUILD_TESTS=ON
+
+      # ================= BUILD =================
+      - name: Build
+        run: |
+          cmake --build build
+
+      # ================= RUN TESTS =================
+      - name: Run tests (Linux)
+        if: runner.os == 'Linux'
+        run: ./build/run_tests
+
+      - name: Run tests (Windows)
+        if: runner.os == 'Windows'
+        run: build\\run_tests.exe

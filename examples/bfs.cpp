@@ -2,7 +2,7 @@
 using namespace std;
 
 #include "../include/graph.hpp"
-#include "../include/bfs.hpp"
+#include "../include/parallel_bfs.hpp"
 // #include "../src/parallel_bfs.cpp"
 
 int main() {

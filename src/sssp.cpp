@@ -1,12 +1,12 @@
-#include <bits/stdc++.h>
-using namespace std;
+#include <vector>
+#include <algorithm>
 
 #include "../include/sssp.hpp"
 #include "../include/engine.hpp"
 
 static const double INF = 1e18;
 
-vector<double> parallel_dijkstra(
+std::vector<double> parallel_dijkstra(
     const WeightedGraph& graph,
     int source,
     int threads
@@ -14,7 +14,7 @@ vector<double> parallel_dijkstra(
     int V = graph.vertices();
     const auto& adj = graph.getWeightedAdj();
 
-    vector<double> dist(V, INF);
+    std::vector<double> dist(V, INF);
     dist[source] = 0.0;
 
     threads = engine::get_thread_count(threads);
@@ -31,8 +31,12 @@ vector<double> parallel_dijkstra(
         engine::parallel_for(0, V, threads, [&](int u) {
             if (dist[u] == INF) return;
 
-            for (auto& [v, w] : adj[u]) {
+            for (auto& edge : adj[u]) {
+                int v = edge.first;
+                double w = edge.second;
+
                 double nd = dist[u] + w;
+
                 if (nd < dist[v]) {
                     dist[v] = nd;
                     changed = true;

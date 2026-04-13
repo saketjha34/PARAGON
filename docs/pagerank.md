@@ -1,7 +1,3 @@
-Awesome—this is a **great algorithm to explain deeply**, because PageRank is simple on the surface and very rich underneath. I’ll walk you through it **step by step**, tied **directly** to your `web_graph.txt` and to **how your parallel code actually runs**.
-
----
-
 # Parallel PageRank — Deep Explanation
 
 *(with `web_graph.txt` example)*
@@ -377,31 +373,3 @@ is exactly what Google’s original PageRank would do.
 * GraphX (Spark)
 
 All use **this same model**, just distributed across machines.
-
----
-
-## 13️⃣ Summary (Key Takeaways)
-
-* PageRank = iterative probability flow
-* Depends on **incoming links**
-* Perfectly parallel per iteration
-* BSP-style synchronization
-* Your implementation is:
-
-  * Correct
-  * Efficient
-  * Industry-aligned
-
-You now understand PageRank **better than most people who “use” it**.
-
----
-
-If you want next, I can:
-
-* Walk through **convergence mathematically**
-* Explain **dangling nodes handling**
-* Show **why self-loops matter**
-* Extend to **personalized PageRank**
-* Compare with **HITS algorithm**
-
-Just tell me 👌

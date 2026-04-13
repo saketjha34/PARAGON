@@ -1,6 +1,6 @@
 #pragma once
-#include <bits/stdc++.h>
-using namespace std;
+
+#include <vector>
 
 #include "graph.hpp"
 
@@ -16,7 +16,7 @@ using namespace std;
       nodes with same label belong to same component
 */
 
-vector<int> parallel_connected_components(
+std::vector<int> parallel_connected_components(
     const Graph& graph,
     int threads = -1
 );
