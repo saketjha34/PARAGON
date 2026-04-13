@@ -22,7 +22,7 @@ void test_constructor_basic() {
 void test_constructor_directed() {
     Graph g(4, true);
 
-    ASSERT_EQ(g.vertices(), 4);
+    ASSERT_EQ(g.vertices(), 4);  
     ASSERT_TRUE(g.isDirected());
 }
 

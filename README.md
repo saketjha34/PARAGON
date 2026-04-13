@@ -1,8 +1,8 @@
 # PARAGON: Parallel Graph Processing Engine
 
-[![License](https://img.shields.io/github/license/saketjha34/paragon-py.svg)](https://github.com/saketjha34/paragon-py/blob/main/LICENSE)
+[![License](https://img.shields.io/github/license/saketjha34/paragon-py.svg)](https://github.com/saketjha34/PARAGON/blob/main/LICENSE)
 [![PyPI version](https://badge.fury.io/py/paragon-engine.svg)](https://pypi.org/project/paragon-engine/)
-[![GitHub issues](https://img.shields.io/github/issues/saketjha34/paragon-py.svg)](https://github.com/saketjha34/paragon-py/issues)
+[![GitHub issues](https://img.shields.io/github/issues/saketjha34/paragon-py.svg)](https://github.com/saketjha34/PARAGON/issues)
 [![Tests](https://github.com/saketjha34/paragon-py/actions/workflows/cpp-tests.yml/badge.svg)](https://github.com/saketjha34/paragon-py/actions)
 
 
@@ -76,7 +76,6 @@ Then:
 pip install paragon-engine
 ```
 
-
 # Quick Start
 
 ## Example: Parallel BFS + DFS
@@ -100,7 +99,6 @@ print(distance)
 visited = parallel_dfs(graph=g, source=0, threads=NUM_THREADS)
 print(visited)
 ```
-
 
 # API Overview
 
@@ -233,9 +231,6 @@ Suggested areas:
 * Performance optimizations
 * Python API improvements
 
-
-# License
-MIT License
 
 # Author
 **Saket Jha**
