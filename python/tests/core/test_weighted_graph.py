@@ -169,3 +169,201 @@ def test_small_stress():
 
     for i in range(n - 1):
         assert g.has_edge(i, i + 1)
+        
+import pytest
+import copy
+from paragon import WeightedGraph
+
+
+# ================= VALIDATION ================= #
+
+def test_invalid_vertices_type():
+    with pytest.raises(ValueError):
+        WeightedGraph(vertices="5")
+
+
+def test_invalid_vertices_negative():
+    with pytest.raises(ValueError):
+        WeightedGraph(vertices=-1)
+
+
+def test_add_edge_invalid_types():
+    g = WeightedGraph(vertices=3)
+
+    with pytest.raises(TypeError):
+        g.add_edge(u=0, v=1, w="x")
+
+
+def test_add_edge_invalid_nodes():
+    g = WeightedGraph(vertices=3)
+
+    with pytest.raises(ValueError):
+        g.add_edge(u=0, v=5, w=1.0)
+
+
+def test_add_edge_negative_node():
+    g = WeightedGraph(vertices=3)
+
+    with pytest.raises(ValueError):
+        g.add_edge(u=-1, v=1, w=1.0)
+
+
+def test_build_adj_list_invalid_structure():
+    g = WeightedGraph(vertices=3)
+
+    with pytest.raises(TypeError):
+        g.build_from_adj_list(adjacency=[1, 2, 3])
+
+
+def test_build_adj_list_invalid_tuple():
+    g = WeightedGraph(vertices=3)
+
+    with pytest.raises(TypeError):
+        g.build_from_adj_list(adjacency=[[1, 2]])
+
+
+def test_build_adj_list_invalid_node():
+    g = WeightedGraph(vertices=3)
+
+    with pytest.raises(ValueError):
+        g.build_from_adj_list(adjacency=[
+            [(1, 2.0)],
+            [(5, 3.0)],  # invalid node
+            []
+        ])
+
+
+def test_build_matrix_invalid_shape():
+    g = WeightedGraph(vertices=3)
+
+    with pytest.raises(ValueError):
+        g.build_from_adj_matrix(matrix=[
+            [0, 1],
+            [1, 0],
+            [0, 1]
+        ])
+
+
+def test_build_matrix_invalid_values():
+    g = WeightedGraph(vertices=3)
+
+    with pytest.raises(TypeError):
+        g.build_from_adj_matrix(matrix=[
+            [0, 1, 0],
+            [1, "x", 1],
+            [0, 1, 0]
+        ])
+
+
+def test_degree_invalid_node():
+    g = WeightedGraph(vertices=3)
+
+    with pytest.raises(ValueError):
+        g.degree(5)
+
+
+def test_has_edge_invalid_node():
+    g = WeightedGraph(vertices=3)
+
+    with pytest.raises(ValueError):
+        g.has_edge(0, 10)
+
+
+# ================= DUNDER METHODS ================= #
+
+def test_len():
+    g = WeightedGraph(vertices=4)
+    assert len(g) == 4
+
+
+def test_contains():
+    g = WeightedGraph(vertices=3)
+
+    assert 0 in g
+    assert 2 in g
+    assert 3 not in g
+    assert "1" not in g
+
+
+def test_getitem():
+    g = WeightedGraph(vertices=3)
+    g.add_edges(edges=[(0, 1, 2.5), (1, 2, 1.2)])
+
+    assert g[1] == [(0, 2.5), (2, 1.2)]
+
+
+def test_getitem_invalid():
+    g = WeightedGraph(vertices=3)
+
+    with pytest.raises(ValueError):
+        _ = g[5]
+
+
+def test_iter():
+    g = WeightedGraph(vertices=4)
+
+    assert list(iter(g)) == [0, 1, 2, 3]
+
+
+def test_repr():
+    g = WeightedGraph(vertices=3)
+
+    r = repr(g)
+
+    assert "WeightedGraph(" in r
+    assert "vertices=3" in r
+    assert "directed=False" in r
+
+
+def test_eq_and_ne():
+    g1 = WeightedGraph(vertices=3)
+    g2 = WeightedGraph(vertices=3)
+
+    assert g1 == g2
+
+    g2.add_edge(u=0, v=1, w=2.0)
+
+    assert g1 != g2
+
+
+def test_bool():
+    g = WeightedGraph(vertices=3)
+    assert bool(g) is True
+
+
+def test_copy():
+    g = WeightedGraph(vertices=3)
+    g.add_edge(u=0, v=1, w=2.5)
+
+    g2 = copy.copy(g)
+
+    # NOTE: shallow copy doesn't copy edges in your implementation
+    assert g2.vertices() == g.vertices()
+    assert g2 is not g
+
+
+def test_deepcopy():
+    g = WeightedGraph(vertices=3)
+    g.add_edge(u=0, v=1, w=2.5)
+
+    g2 = copy.deepcopy(g)
+
+    assert g2 == g
+    assert g2 is not g
+
+    # modify original → deepcopy unaffected
+    g.add_edge(u=1, v=2, w=1.0)
+
+    assert g2 != g
+
+
+# ================= EXTRA EDGE CASE ================= #
+
+def test_multiple_edges_and_access():
+    g = WeightedGraph(vertices=3)
+    g.add_edges(edges=[
+        (0, 1, 2.5),
+        (0, 2, 3.5)
+    ])
+
+    assert sorted(g[0]) == [(1, 2.5), (2, 3.5)]

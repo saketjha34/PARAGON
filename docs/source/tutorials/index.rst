@@ -19,5 +19,6 @@ If you are new to PARAGON, we recommend starting with:
    :caption: Tutorials:
 
    intro_to_graphs
-   weighted_graphs
+   graph_api_interface
+   weighted_graph_api_interface
    algorithms
