@@ -1,5 +1,10 @@
 # -- Project information -----------------------------------------------------
 
+import os
+import sys
+
+sys.path.insert(0, os.path.abspath("../../"))
+
 project = 'PARAGON'
 author = 'Jha Saket Sunil'
 copyright = '2026, Jha Saket Sunil'
@@ -58,4 +63,11 @@ html_sidebars = {
         "sourcelink.html",
         "searchbox.html",
     ]
+}
+
+
+autodoc_default_options = {
+    "members": True,
+    "undoc-members": True,
+    "show-inheritance": True,
 }

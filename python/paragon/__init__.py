@@ -5,6 +5,9 @@ from paragon.graphs import (
     generate_normal_weighted_graph
 )
 
+from .algorithms import *
+from .graphs import *
+
 
 __version__ = "0.1.9"
 
