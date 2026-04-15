@@ -64,6 +64,34 @@ def parallel_pagerank(
     >>> parallel_pagerank(g)
     [0.25, 0.25, 0.25, 0.25]
     """
+    # Graph validation
+    if not isinstance(graph, Graph):
+        raise TypeError("graph must be an instance of Graph")
+
+    # Iterations validation
+    if not isinstance(iterations, int):
+        raise TypeError("iterations must be an integer")
+
+    if iterations <= 0:
+        raise ValueError("iterations must be a positive integer")
+
+    # Damping validation
+    if not isinstance(damping, (int, float)):
+        raise TypeError("damping must be a numeric value")
+
+    if not (0.0 < damping < 1.0):
+        raise ValueError("damping must be between 0 and 1 (exclusive)")
+
+    # Threads validation
+    if not isinstance(threads, int):
+        raise TypeError("threads must be an integer")
+
+    if threads == 0:
+        raise ValueError("threads must be >= 1 or -1")
+
+    if threads < -1:
+        raise ValueError("threads must be -1 (auto) or a positive integer")
+
     return _parallel_pagerank(graph, iterations, damping, threads)
 
 
@@ -114,4 +142,32 @@ def parallel_pagerank_bfs(
     >>> parallel_pagerank_bfs(g)
     [0.25, 0.25, 0.25, 0.25]
     """
+    # Graph validation
+    if not isinstance(graph, Graph):
+        raise TypeError("graph must be an instance of Graph")
+
+    # Iterations validation
+    if not isinstance(iterations, int):
+        raise TypeError("iterations must be an integer")
+
+    if iterations <= 0:
+        raise ValueError("iterations must be a positive integer")
+
+    # Damping validation
+    if not isinstance(damping, (int, float)):
+        raise TypeError("damping must be a numeric value")
+
+    if not (0.0 < damping < 1.0):
+        raise ValueError("damping must be between 0 and 1 (exclusive)")
+
+    # Threads validation
+    if not isinstance(threads, int):
+        raise TypeError("threads must be an integer")
+
+    if threads == 0:
+        raise ValueError("threads must be >= 1 or -1")
+
+    if threads < -1:
+        raise ValueError("threads must be -1 (auto) or a positive integer")
+
     return _parallel_pagerank_bfs(graph, iterations, damping, threads)

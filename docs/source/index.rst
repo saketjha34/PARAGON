@@ -38,18 +38,7 @@ graph program:
 
 - :doc:`install`: Complete installation guide for Linux, macOS, and Windows  
 - :doc:`getting_started`: Learn how to create graphs and run algorithms  
-
-
-Benchmarks
-----------
-
-PARAGON is designed for performance critical workloads. Benchmark results and
-comparisons can be found here:
-
-- :doc:`benchmarks`: Performance evaluation and scalability analysis  
-
-Documentation
--------------
+- :doc:`tutorials/index`: Explore in depth tutorials and examples
 
 .. toctree::
    :maxdepth: 2
@@ -58,11 +47,4 @@ Documentation
    install
    getting_started
    tutorials/index
-   algorithms
    benchmarks
-
-
-Links
---------
-
-- GitHub: https://github.com/saketjha34/PARAGON

@@ -1,15 +1,12 @@
-from paragon import WeightedGraph
+from paragon.graphs import generate_normal_graph, generate_normal_weighted_graph
 
-wg = WeightedGraph(vertices=4)
+g = generate_normal_graph(vertices=10, edges=20, directed=True, seed=42)
 
-wg.add_edges(edges=[
-    (0, 1, 2.5),
-    (1, 2, 1.0),
-    (2, 3, 3.2)
-])
+wg = generate_normal_weighted_graph(
+    vertices=10, edges=20, directed=True, seed=42)
 
-print("Vertices:", wg.vertices())
-print("Adjacency:", wg.get_adj())
-print("Degree:", wg.degree(u=1))
-print("Has edge:", wg.has_edge(u=0, v=1))
+print(g.vertices())
+g.print_graph()
+
+print(wg.vertices())
 wg.print_graph()
