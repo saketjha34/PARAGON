@@ -4,6 +4,8 @@
 [![PyPI](https://img.shields.io/pypi/v/paragon-engine)](https://pypi.org/project/paragon-engine/)
 [![GitHub issues](https://img.shields.io/github/issues/saketjha34/PARAGON.svg)](https://github.com/saketjha34/PARAGON/issues)
 
+[![Documentation Status](https://readthedocs.org/projects/paragon/badge/?version=latest)](https://paragon.readthedocs.io/en/latest/)
+
 
 [Documentation](https://paragon.readthedocs.io/en/latest/) |
 [Resources](README.md) |

@@ -1,0 +1,100 @@
+v0.1.11
+=======
+
+This release introduces major improvements to the Python API,
+documentation, validation, and graph utilities.
+
+Highlights
+----------
+
+- Comprehensive Graph & WeightedGraph tutorials
+- Input validation across all APIs
+- Rich Python dunder method support
+- Expanded test coverage
+- Synthetic graph generators
+- Full Python API documentation
+
+
+Core Improvements
+-----------------
+
+Graph & WeightedGraph
+~~~~~~~~~~~~~~~~~~~~~
+
+- Added input validation for:
+  - vertices, edges
+  - adjacency lists and matrices
+  - edge weights
+- Improved error handling
+- Added dunder methods:
+  - ``__repr__``, ``__len__``, ``__contains__``
+  - ``__getitem__``, ``__iter__``
+  - ``__eq__``, ``__ne__``
+  - ``__bool__``, ``__copy__``, ``__deepcopy__``
+
+
+Testing
+-------
+
+- Added validation tests for:
+  - constructors
+  - edge operations
+  - adjacency structures
+- Added tests for dunder methods
+
+
+Documentation
+-------------
+
+- Added Graph API tutorial
+- Added WeightedGraph API tutorial
+- Updated tutorials index
+- Added Python API reference
+
+Graph Generators
+----------------
+
+New utilities:
+
+- ``generate_normal_graph``
+- ``generate_normal_weighted_graph``
+
+Features:
+
+- Gaussian-based sampling
+- Configurable distributions
+- Reproducibility with seeds
+
+Algorithm Validation
+--------------------
+
+Added validation for:
+
+- ``parallel_bfs``
+- ``parallel_dfs``
+- ``parallel_connected_components``
+- ``parallel_dijkstra``
+- ``parallel_pagerank``
+- ``parallel_pagerank_bfs``
+
+Pull Requests
+-------------
+
+- Add API docs, validation, dunders & tests  
+  https://github.com/saketjha34/PARAGON/pull/3
+
+- Add graph generators, tutorials, tests  
+  https://github.com/saketjha34/PARAGON/pull/4
+
+
+Installation
+------------
+
+.. code-block:: bash
+
+   pip install paragon-engine==0.1.11
+
+
+.. note::
+
+   This release significantly improves robustness and usability of the Python API.

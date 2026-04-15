@@ -51,3 +51,4 @@ graph program:
    tutorials/index
    python_package/index
    benchmarks
+   changes/index
