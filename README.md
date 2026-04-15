@@ -3,9 +3,8 @@
 [![License](https://img.shields.io/github/license/saketjha34/PARAGON.svg)](https://github.com/saketjha34/PARAGON/blob/main/LICENSE)
 [![PyPI](https://img.shields.io/pypi/v/paragon-engine)](https://pypi.org/project/paragon-engine/)
 [![GitHub issues](https://img.shields.io/github/issues/saketjha34/PARAGON.svg)](https://github.com/saketjha34/PARAGON/issues)
-
 [![Documentation Status](https://readthedocs.org/projects/paragon/badge/?version=latest)](https://paragon.readthedocs.io/en/latest/)
-
+[![GitHub release](https://img.shields.io/github/v/release/saketjha34/PARAGON)](https://github.com/saketjha34/PARAGON/releases)
 
 [Documentation](https://paragon.readthedocs.io/en/latest/) |
 [Resources](README.md) |
