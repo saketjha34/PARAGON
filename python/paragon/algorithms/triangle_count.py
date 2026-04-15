@@ -49,4 +49,22 @@ def parallel_triangle_count(graph: Graph, threads: int = -1) -> int:
     >>> parallel_triangle_count(g)
     1
     """
+    # Validate graph
+    if not isinstance(graph, Graph):
+        raise TypeError("graph must be an instance of Graph")
+
+    # Ensure graph is undirected
+    if graph.is_directed():
+        raise ValueError("triangle counting requires an undirected graph")
+
+    # Validate threads
+    if not isinstance(threads, int):
+        raise TypeError("threads must be an integer")
+
+    if threads == 0:
+        raise ValueError("threads must be >= 1 or -1")
+
+    if threads < -1:
+        raise ValueError("threads must be -1 (auto) or a positive integer")
+
     return _triangle_count_parallel(graph, threads)

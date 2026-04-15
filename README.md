@@ -5,6 +5,12 @@
 [![GitHub issues](https://img.shields.io/github/issues/saketjha34/PARAGON.svg)](https://github.com/saketjha34/PARAGON/issues)
 
 
+[Documentation](https://paragon.readthedocs.io/en/latest/) |
+[Resources](README.md) |
+[Contributors](CONTRIBUTING.md) |
+[Release Notes](https://paragon.readthedocs.io/en/latest/)
+
+
 PARAGON is a high performance parallel graph processing engine written in modern C++ with Python bindings via pybind11.
 It provides scalable implementations of core graph algorithms like:
 

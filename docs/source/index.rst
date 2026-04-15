@@ -39,6 +39,8 @@ graph program:
 - :doc:`install`: Complete installation guide for Linux, macOS, and Windows  
 - :doc:`getting_started`: Learn how to create graphs and run algorithms  
 - :doc:`tutorials/index`: Explore in depth tutorials and examples
+- :doc:`python_package/index`: Use PARAGON as a Python package in your projects
+- :doc:`benchmarks`: Performance benchmarks and comparisons
 
 .. toctree::
    :maxdepth: 2
@@ -47,4 +49,5 @@ graph program:
    install
    getting_started
    tutorials/index
+   python_package/index
    benchmarks
