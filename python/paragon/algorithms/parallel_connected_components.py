@@ -52,4 +52,18 @@ def parallel_connected_components(graph: Graph, threads: int = -1) -> List[int]:
     >>> connected_components(g)
     [0, 0, 0, 3, 3, 5]
     """
+    # Validate graph
+    if not isinstance(graph, Graph):
+        raise TypeError("graph must be an instance of Graph")
+
+    # Validate threads
+    if not isinstance(threads, int):
+        raise TypeError("threads must be an integer")
+
+    if threads == 0:
+        raise ValueError("threads must be >= 1 or -1")
+
+    if threads < -1:
+        raise ValueError("threads must be -1 (auto) or a positive integer")
+
     return _parallel_connected_components(graph, threads)

@@ -55,4 +55,32 @@ def parallel_dijkstra(graph: WeightedGraph, source: int, threads: int = -1) -> L
     >>> parallel_dijkstra(g, 0)
     [0.0, 1.0, 3.0, 4.0]
     """
+    # Validate graph
+    if not isinstance(graph, WeightedGraph):
+        raise TypeError("graph must be an instance of WeightedGraph")
+
+    # Validate source
+    if not isinstance(source, int):
+        raise TypeError("source must be an integer")
+
+    if source < 0 or source >= graph.vertices():
+        raise ValueError(f"Invalid source node: {source}")
+
+    # Validate threads
+    if not isinstance(threads, int):
+        raise TypeError("threads must be an integer")
+
+    if threads == 0:
+        raise ValueError("threads must be >= 1 or -1")
+
+    if threads < -1:
+        raise ValueError("threads must be -1 (auto) or a positive integer")
+
+    # Validate weights (non-negative)
+    adj = graph.get_adj()
+    for neighbors in adj:
+        for _, w in neighbors:
+            if w < 0:
+                raise ValueError("Negative edge weights are not supported")
+
     return _parallel_dijkstra(graph, source, threads)

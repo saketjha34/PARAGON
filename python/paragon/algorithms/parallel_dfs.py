@@ -55,4 +55,26 @@ def parallel_dfs(graph: Graph, source: int, threads: int = -1) -> List[bool]:
     >>> parallel_dfs(g, 0)
     [True, True, True, True, False]
     """
+
+    # Validate graph
+    if not isinstance(graph, Graph):
+        raise TypeError("graph must be an instance of Graph")
+
+    # Validate source
+    if not isinstance(source, int):
+        raise TypeError("source must be an integer")
+
+    if source < 0 or source >= graph.vertices():
+        raise ValueError(f"Invalid source node: {source}")
+
+    # Validate threads
+    if not isinstance(threads, int):
+        raise TypeError("threads must be an integer")
+
+    if threads == 0:
+        raise ValueError("threads must be >= 1 or -1")
+
+    if threads < -1:
+        raise ValueError("threads must be -1 (auto) or a positive integer")
+
     return _parallel_dfs(graph, source, threads)

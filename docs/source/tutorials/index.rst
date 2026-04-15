@@ -21,4 +21,4 @@ If you are new to PARAGON, we recommend starting with:
    intro_to_graphs
    graph_api_interface
    weighted_graph_api_interface
-   algorithms
+   algorithms/index
