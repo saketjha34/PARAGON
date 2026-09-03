@@ -11,7 +11,7 @@ std::vector<double> parallel_dijkstra(
     int source,
     int threads
 ) {
-    int V = graph.vertices();
+    int V = graph.vertices();   
     const auto& adj = graph.getWeightedAdj();
 
     std::vector<double> dist(V, INF);
